@@ -178,10 +178,19 @@ const rules = {
   functionBody: $ => $.region,
 
   // Blocks
-  block: $ => seq($.blockLabel, repeat1($.operation)),
-  blockLabel: $ => seq($.blockId, optional($.blockArgList), ':'),
+  block: $ => seq(
+    // SPEC: $.blockLabel,
+    $.operation // SPEC: repeat1($.operation)
+  ),
+
+  blockLabel: $ => seq(
+    $.blockId,
+    optional($.blockArgList), ':'),
+
   blockId: $ => $.caretId,
+
   caretId: $ => seq('^', $.suffixId),
+
   valueIdAndType: $ => seq($.valueId, ':', $.type),
 
   // Non-empty list of names and types.
@@ -274,7 +283,7 @@ const rules = {
   // MLIR functions can return multiple values.
   functionResultType: $ => choice(
     $.typeListParens,
-    // $.nonFunctionType // FIXME undefined
+    $.type // SPEC $.nonFunctionType
   ),
 
   functionType: $ => seq($.typeListParens, '->', $.functionResultType),
