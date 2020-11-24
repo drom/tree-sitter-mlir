@@ -1,0 +1,100 @@
+============================================
+func @abort()
+============================================
+func @abort()
+----
+(source_file (function
+  (functionSignature (symbolRefId (suffixId)))
+))
+
+============================================
+func @scribble(i32)
+============================================
+func @scribble(i32)
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList (type (standardType (integerType (signlessIntegerType)))))
+)))
+
+============================================
+func @unscribble(f64, i32)
+============================================
+func @unscribble(f64, i32)
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList
+    (type (standardType (floatType)))
+    (type (standardType (integerType (signlessIntegerType))))
+  )
+)))
+
+============================================
+func @unscribble(f16) -> f32
+============================================
+func @unscribble(f16) -> f32
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList (type (standardType (floatType))))
+  (functionResultList (type (standardType (floatType))))
+)))
+
+============================================
+func @mul(%Abaz: i32, %a: i32) -> (i32)
+============================================
+func @mul(%Abaz: i32, %a: i32) -> (i32)
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList
+    (namedArgument (valueId (suffixId)) (type (standardType (integerType (signlessIntegerType)))))
+    (namedArgument (valueId (suffixId)) (type (standardType (integerType (signlessIntegerType)))))
+  )
+  (functionResultList (functionResultListParens (functionResultListNoParens (functionResult (type (standardType (integerType (signlessIntegerType))))))))
+)))
+
+============================================
+func @scribble(i32, i64, memref<? x 128 x f32, #layout_map0>) -> f64
+============================================
+func @scribble(i32, i64, memref<? x 128 x f32, #layout_map0>) -> f64
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList
+    (type (standardType (integerType (signlessIntegerType))))
+    (type (standardType (integerType (signlessIntegerType))))
+    (type (standardType (memrefType (rankedMemrefType
+      (dimensionListRanked
+        (dimension)
+        (dimension (decimalLiteral))
+      )
+      (tensorMemrefElementType (vectorElementType (floatType)))
+      (layoutSpecification (semiAffineMap (semiAffineMapId (suffixId))))
+    ))))
+  )
+  (functionResultList (type (standardType (floatType))))
+)))
+
+============================================
+func @mul(%A: tensor<100x?xf32>, %B: tensor<?x50xf32>) -> (tensor<100x50xf32>)
+============================================
+func @mul(%A: tensor<100x?xf32>, %B: tensor<?x50xf32>) -> (tensor<100x50xf32>)
+----
+(source_file (function (functionSignature
+  (symbolRefId (suffixId))
+  (argumentList
+    (namedArgument
+      (valueId (suffixId))
+      (type (standardType (tensorType (dimensionList (dimensionListRanked (dimension (decimalLiteral)) (dimension))) (tensorMemrefElementType (vectorElementType (floatType))))))
+    )
+    (namedArgument
+      (valueId (suffixId))
+      (type (standardType (tensorType (dimensionList (dimensionListRanked (dimension) (dimension (decimalLiteral)))) (tensorMemrefElementType (vectorElementType (floatType))))))
+    )
+  )
+  (functionResultList (functionResultListParens (functionResultListNoParens (functionResult
+    (type (standardType (tensorType (dimensionList (dimensionListRanked (dimension (decimalLiteral)) (dimension (decimalLiteral)))) (tensorMemrefElementType (vectorElementType (floatType))))))
+  ))))
+)))

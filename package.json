@@ -1,0 +1,47 @@
+{
+  "name": "tree-sitter-mlir",
+  "version": "0.1.0",
+  "description": "MLIR grammar for tree-sitter",
+  "author": "Aliaksei Chapyzhenka",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "install": "node bin/install.js",
+    "prepare": "node bin/install.js",
+    "wasm": "tree-sitter generate --next-abi && tree-sitter build-wasm",
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drom/tree-sitter-mlir.git"
+  },
+  "keywords": [
+    "parser",
+    "tree-sitter",
+    "MLIR"
+  ],
+  "files": [
+    "bin/*",
+    "grammar.js",
+    "binding.gyp",
+    "src/*"
+  ],
+  "bugs": {
+    "url": "https://github.com/drom/tree-sitter-mlir/issues"
+  },
+  "homepage": "https://github.com/drom/tree-sitter-mlir#readme",
+  "devDependencies": {
+    "@drom/eslint-config": "^0.10.0",
+    "eslint": "^7.14.0",
+    "fs-extra": "^9.0.1",
+    "tree-sitter": "^0.17.1",
+    "tree-sitter-cli": "^0.17.3"
+  },
+  "eslintConfig": {
+    "extends": "@drom/eslint-config/eslint4/node8"
+  },
+  "dependencies": {
+    "nan": "^2.14.2"
+  }
+}
