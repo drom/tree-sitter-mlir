@@ -1,5 +1,9 @@
 'use strict';
 
+const PREC = {
+  COMMENT: 1, // Prefer comments over regexes
+};
+
 const rules = {
 
   // comment: $ => token(choice(
@@ -665,6 +669,16 @@ const rules = {
   // Uses of integer sets may use the inline form or the named form.
   integerSet: $ => choice($.integerSetId, $.integerSetInline),
 
+
+  // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+  comment: $ => token(prec(PREC.COMMENT, choice(
+    seq('//', /.*/),
+    seq(
+      '/*',
+      /[^*]*\*+([^/*][^*]*\*+)*/,
+      '/'
+    )
+  ))),
 };
 
 module.exports = grammar({
@@ -672,7 +686,7 @@ module.exports = grammar({
   // word: $ => $.id,
   extras: $ => [
     /\s/,
-    // $.comment
+    $.comment
   ],
   inline: $ => [],
   rules: rules
@@ -680,4 +694,4 @@ module.exports = grammar({
 
 /* eslint camelcase: 0 */
 /* eslint no-unused-vars: 0 */
-/* globals grammar repeat repeat1 choice token seq optional */
+/* globals grammar repeat repeat1 choice token seq optional prec */
