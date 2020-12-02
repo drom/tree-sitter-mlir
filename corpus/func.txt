@@ -80,8 +80,11 @@ func @scribble(i32, i64, memref<? x 128 x f32, #layout_map0>) -> f64
 ============================================
 func @mul(%A: tensor<100x?xf32>, %B: tensor<?x50xf32>) -> (tensor<100x50xf32>)
 ============================================
+
 func @mul(%A: tensor<100x?xf32>, %B: tensor<?x50xf32>) -> (tensor<100x50xf32>)
+
 ----
+
 (source_file (function (functionSignature
   (symbolRefId (suffixId))
   (argumentList
@@ -98,3 +101,64 @@ func @mul(%A: tensor<100x?xf32>, %B: tensor<?x50xf32>) -> (tensor<100x50xf32>)
     (type (standardType (tensorType (dimensionList (dimensionListRanked (dimension (decimalLiteral)) (dimension (decimalLiteral)))) (tensorMemrefElementType (vectorElementType (floatType))))))
   ))))
 )))
+
+============================================
+func @bitwise(%a: i7, %b: i7) -> i7 { ... }
+============================================
+
+func @bitwise(%a: i7, %b: i7) -> i7 {
+  %and1 = rtl.and %a, %b, %a {foo = "bar"} : i7
+  %geq = rtl.icmp "sge" %small1, %small2 : i19
+  %result = rtl.concat %and1, %or1, %xor1 : (i7, i7, i7) -> i21
+  return %result : i21
+}
+
+----
+(source_file (function
+  (functionSignature
+    (symbolRefId (suffixId))
+    (argumentList
+      (namedArgument
+        (valueId (suffixId))
+        (type (standardType (integerType (signlessIntegerType))))
+      )
+      (namedArgument
+        (valueId (suffixId))
+        (type (standardType (integerType (signlessIntegerType))))
+      )
+    )
+    (functionResultList (type (standardType (integerType (signlessIntegerType)))))
+  )
+  (functionBody (region
+    (block (operation
+      (opResultList (opResult (valueId (suffixId))))
+      (customOperation (rtlFormat (rtlUTVariadicRTLOp
+        (valueIdList (valueId (suffixId)) (valueId (suffixId)) (valueId (suffixId)))
+        (attributeDict (attributeEntry (dependentAttributeEntry (dependentAttributeName (simpleAttributeName)) (attributeValue (standardAttribute (stringAttribute (stringLiteral)))))))
+        (type (standardType (integerType (signlessIntegerType))))
+      )))
+    ))
+    (block (operation
+      (opResultList (opResult (valueId (suffixId))))
+      (customOperation (rtlFormat (rtlICmpOp
+        (valueId (suffixId))
+        (valueId (suffixId))
+        (type (standardType (integerType (signlessIntegerType))))
+      )))
+    ))
+    (block (operation
+      (opResultList (opResult (valueId (suffixId))))
+      (customOperation (rtlFormat (rtlVariadicRTLOp
+        (valueIdList (valueId (suffixId)) (valueId (suffixId)) (valueId (suffixId)))
+        (typeListNoParens (type (standardType (integerType (signlessIntegerType)))) (type (standardType (integerType (signlessIntegerType)))) (type (standardType (integerType (signlessIntegerType)))))
+        (type (standardType (integerType (signlessIntegerType))))
+      )))
+    ))
+    (block (operation
+      (customOperation (standardFormat (stdReturn
+        (valueId (suffixId))
+        (type (standardType (integerType (signlessIntegerType))))
+      )))
+    ))
+  ))
+))
