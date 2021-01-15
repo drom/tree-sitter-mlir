@@ -23,60 +23,77 @@ module.exports = {
       $.rtlRTLModuleOp,
       $.rtlRTLExternModuleOp,
       $.rtlInstanceOp,
-      $.rtlOutputOp,
+      $.rtlOutputOp
     )
   ),
 
   // Combinatorial.td
 
-  rtlConstantOp: $ => seq('constant',
-    optional(seq('(', field('value', seq(optional('-'), $.integerAttribute)), ')')),
+  signedIntegerAttribute: $ => seq(optional('-'), $.integerAttribute),
+
+  rtlConstantOp: $ => seq(
+    field('operation', 'constant'),
+    optional(seq(
+      '(',
+      field('value', $.signedIntegerAttribute),
+      ')'
+    )),
     field('attr_dict', optional($.attributeDict)),
     ':',
     field('result_type', $.type)
   ),
 
-  rtlUTBinRTLOp: $ => seq(choice('sub', 'divu', 'divs', 'modu', 'mods', 'shl', 'shru', 'shrs'),
-    field('lhs', $.valueId), ',', field('rhs', $.valueId),
+  rtlUTBinRTLOp: $ => seq(
+    field('operation', choice('sub', 'divu', 'divs', 'modu', 'mods', 'shl', 'shru', 'shrs')),
+    field('lhs', $.valueId),
+    ',',
+    field('rhs', $.valueId),
     optional($.attributeDict),
     ':',
     field('result_type', $.type)
   ),
 
-  rtlVariadicRTLOp: $ => seq('concat',
+  rtlVariadicRTLOp: $ => seq(
+    field('operation', 'concat'),
     field('inputs', $.valueIdList),
     field('attr_dict', optional($.attributeDict)),
     ':',
     '(', field('inputs_types', $.typeListNoParens), ')', '->', field('result_type', $.type)
   ),
 
-  rtlUTVariadicRTLOp: $ => seq(choice('add', 'mul', 'and', 'or', 'xor'),
+  rtlUTVariadicRTLOp: $ => seq(
+    field('operation', choice('add', 'mul', 'and', 'or', 'xor')),
     field('inputs', $.valueIdList),
     field('attr_dict', optional($.attributeDict)),
     ':',
     field('result_type', $.type)
   ),
 
-  rtlICmpOp: $ => seq('icmp',
+  rtlICmpOp: $ => seq(
+    'icmp',
     field('predicate', seq(
       '"',
       choice('eq', 'ne', 'slt', 'sle', 'sgt', 'sge', 'ult', 'ule', 'ugt', 'uge'),
       '"'
     )),
-    field('lhs', $.valueId), ',', field('rhs', $.valueId),
+    field('lhs', $.valueId),
+    ',',
+    field('rhs', $.valueId),
     field('attr_dict', optional($.attributeDict)),
     ':',
     field('lhs_type', $.type)
   ),
 
-  rtlUnaryI1ReductionRTLOp: $ => seq(choice('andr', 'orr', 'xorr'),
+  rtlUnaryI1ReductionRTLOp: $ => seq(
+    field('operation', choice('andr', 'orr', 'xorr')),
     field('input', $.valueId),
     field('attr_dict', optional($.attributeDict)),
     ':',
     field('input_type', $.type)
   ),
 
-  rtlExtractOp: $ => seq('extract',
+  rtlExtractOp: $ => seq(
+    'extract',
     field('input', $.valueId),
     'from',
     field('lowBit', $.integerLiteral),
@@ -85,7 +102,8 @@ module.exports = {
     '(', field('input_type', $.type), ')', '->', field('result_type', $.type)
   ),
 
-  rtlSZExtOp: $ => seq(choice('sext', 'zext'),
+  rtlSZExtOp: $ => seq(
+    field('operation', choice('sext', 'zext')),
     field('input', $.valueId),
     field('attr_dict', optional($.attributeDict)),
     ':',
@@ -105,7 +123,8 @@ module.exports = {
 
   // Statements.td
 
-  rtlConnectOp: $ => seq('connect',
+  rtlConnectOp: $ => seq(
+    'connect',
     field('dest', $.valueId),
     ',',
     field('src', $.valueId),
@@ -114,7 +133,8 @@ module.exports = {
     field('dest_type', $.type)
   ),
 
-  rtlWireOp: $ => seq('wire',
+  rtlWireOp: $ => seq(
+    'wire',
     field('attr_dict', optional($.attributeDict)),
     ':',
     field('result_type', $.type)
